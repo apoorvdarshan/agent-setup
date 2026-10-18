@@ -42,7 +42,9 @@ These instructions guide agent behaviour; they do not enforce runtime security p
 
 ## Closing panes
 
-Command-W uses HerdR’s built-in close action. HerdR’s original close confirmation is enabled (`ui.confirm_close = true`): closing the last pane asks before closing its workspace. This does not warn for every running agent in other panes. No replacement tab is created automatically. Command-Shift-T remains configured to reopen recent closes.
+Command-W uses `scripts/herdr-close-pane.py` in HerdR’s built-in terminal popup container. The custom confirmation appears for the final pane or a running agent/command: Enter closes, Escape cancels. After confirmation, closing the final pane creates a fresh tab in the same directory to keep its workspace open. Cancellation, timeout, or a changed foreground process leaves the pane untouched. This is a custom close handler, not HerdR’s stock close dialog.
+
+Explicit workspace closes retain HerdR’s original native confirmation (`ui.confirm_close = true`). Command-Shift-T remains configured to reopen recent closes.
 
 ## Reopen closed panes and tabs
 
