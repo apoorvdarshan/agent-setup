@@ -1,4 +1,4 @@
-theme = Catppuccin Mocha
+theme = Ayu
 
 # Start Herdr in every new Ghostty tab, window, or split.
 command = /usr/bin/env -u NO_COLOR COLORTERM=truecolor /opt/homebrew/bin/herdr
