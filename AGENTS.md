@@ -5,7 +5,7 @@ alwaysApply: true
 
 Never change ~/Documents/agent-setup/AGENTS.md or any linked instruction file on your own initiative, including in the middle of other work. When a rule seems worth adding or changing, suggest the exact wording and why, and edit only after I approve it in the conversation. Subagents and background agents never edit these files; they pass suggestions to the main agent.
 
-Before every update to the shared master ~/Documents/agent-setup/AGENTS.md or any linked instruction entrypoint for Codex, Claude Code, OpenCode, Cursor, or Copilot, create a dated, timestamped backup under ~/Documents/agent-setup/backups/. Follow symlinks and back up the original contents of every distinct target being changed; one backup of the master covers entrypoints that resolve to that same file. Edit the resolved target and keep all active symlinks intact. Never overwrite an earlier backup.
+Edit the resolved target and keep all active symlinks intact.
 
 For every code change, create a git commit and push it to the current branch before finishing, unless the user explicitly says not to or pushing is impossible.
 
@@ -440,8 +440,6 @@ Privacy Policy and Terms must link to verified public pages on the app’s own w
 
 Prefer verified website or repository links for legal pages, licenses, documentation, guides, and credits. Don’t create dedicated in-app readers unless I request them. Keep functional controls—appearance, version information, update checks—and required bundled notices native.
 
-Reuse the app’s existing website and verified Privacy and Terms URLs. If they’re missing, suggest creating an app website at `<app-name>.apoorvdarshan.com`, using a suitable subdomain based on the app’s name. Get my approval before setup or publishing. Use my existing Cloudflare setup and add only the configuration needed for that subdomain. Preserve the main domain, other DNS records, routes, and hosted apps. Ask before modifying conflicting existing configuration. Verify the published pages before linking them from the app.
-
 ## App ratings and sharing
 
 Suggest these for new mobile apps, or existing ones that lack them; add
@@ -724,5 +722,5 @@ credentials or outreach logs. Preserve Documents resume symlinks into
 changes, commit/push the source and verified output with
 `website/public/Apoorv_Darshan_Resume.pdf`, deploy the website, and verify public
 results. Preserve curated ordering, factual metrics, and unrelated content.
-Connect, What I Use, and Agent Setup changes normally affect README and website
+Connect and What I Use changes normally affect README and website
 only, not the resume. Follow existing repository protections and commit rules.
