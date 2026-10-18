@@ -18,6 +18,29 @@ def run(*args):
     return reply['result']
 
 
+def process_state(pane):
+    info = run('pane', 'process-info', '--pane', pane['pane_id'])['process_info']
+    shell = info.get('shell_pid')
+    processes = info.get('foreground_processes', [])
+    busy = bool(pane.get('agent')) or not shell or not processes or any(
+        p.get('pid') != shell for p in processes)
+    identity = (pane.get('agent'), info.get('foreground_process_group_id'),
+                tuple(sorted(p['pid'] for p in processes)))
+    return busy, identity
+
+
+def confirm_close():
+    # Static AppleScript: no command lines, paths, or user text are interpolated.
+    script = '''
+        display dialog "An agent or command may still be running in this pane. Closing it will stop the process. Close anyway?" with title "Close HerdR pane?" buttons {"Cancel", "Close Pane"} default button "Cancel" cancel button "Cancel" with icon caution giving up after 60
+        if gave up of result then return "cancel"
+        return button returned of result
+    '''
+    result = subprocess.run(['/usr/bin/osascript', '-e', script],
+                            capture_output=True, text=True)
+    return result.returncode == 0 and result.stdout.strip() == 'Close Pane'
+
+
 def close(pane_id):
     pane = run('pane', 'get', pane_id)['pane']
     workspace = pane['workspace_id']
@@ -25,9 +48,19 @@ def close(pane_id):
     locks = Path.home() / '.cache/herdr-close-pane'
     locks.mkdir(parents=True, exist_ok=True, mode=0o700)
     with (locks / key).open('a') as lock:
-        fcntl.flock(lock, fcntl.LOCK_EX)
+        try:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            return  # A close/confirmation is already in progress for this workspace.
         # Re-read after acquiring the lock: repeated shortcuts may target a closed pane.
         pane = run('pane', 'get', pane_id)['pane']
+        busy, identity = process_state(pane)
+        if busy and not confirm_close():
+            return
+        # Never apply an earlier confirmation to a different foreground process.
+        pane = run('pane', 'get', pane_id)['pane']
+        if process_state(pane)[1] != identity:
+            return
         panes = run('pane', 'list', '--workspace', workspace)['panes']
         if len(panes) == 1 and panes[0]['pane_id'] == pane_id:
             cwd = pane.get('foreground_cwd') or pane['cwd']

@@ -42,7 +42,7 @@ These instructions guide agent behaviour; they do not enforce runtime security p
 
 ## Keep the workspace when closing panes
 
-Command-W (HerdR prefix+x) uses `scripts/herdr-close-pane.py`: it closes the selected pane normally, but first creates a fresh tab in the same directory if this is the workspace’s final pane. Failed replacement creation leaves the original pane open. This applies to this shortcut, not shell exit, tab-menu closes, or explicit workspace closes. Reload with `herdr server reload-config`; Ghostty’s existing shortcut needs no change.
+Command-W (HerdR prefix+x) uses `scripts/herdr-close-pane.py`: a macOS confirmation (Cancel by default) appears for a running agent/foreground command or uncertain process state. Cancel, timeout, or a changed foreground process leaves the pane open. Idle shells close without a dialog. It closes the selected pane normally, but first creates a fresh tab in the same directory if this is the workspace’s final pane. Failed replacement creation leaves the original pane open. This applies to this shortcut, not shell exit, tab-menu closes, or explicit workspace closes. Reload with `herdr server reload-config`; Ghostty’s existing shortcut needs no change.
 
 ## Reopen closed panes and tabs
 
