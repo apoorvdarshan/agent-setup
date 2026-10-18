@@ -40,9 +40,9 @@ Run `python3 scripts/check-public.py` after staging. It scans the exact staged f
 
 These instructions guide agent behaviour; they do not enforce runtime security permissions.
 
-## Keep the workspace when closing panes
+## Closing panes
 
-Command-W (HerdR prefix+x) uses `scripts/herdr-close-pane.py`: a HerdR terminal popup asks for confirmation for the final pane, a running agent/foreground command, or uncertain process state. Enter confirms; Escape cancels (clickable buttons also work). Cancel, a 60-second timeout, or a changed foreground process leaves the pane open. Idle shells in other tabs close without confirmation. This uses HerdR’s built-in popup container with our close handler, not the stock workspace-close action. It closes the selected pane normally, but first creates a fresh tab in the same directory if this is the workspace’s final pane. Failed replacement creation leaves the original pane open. This applies to this shortcut, not shell exit, tab-menu closes, or explicit workspace closes. Reload with `herdr server reload-config`; Ghostty’s existing shortcut needs no change.
+Command-W uses HerdR’s built-in close action. Close confirmation is disabled (`ui.confirm_close = false`); closing the last pane can close its workspace. No replacement tab is created automatically. Command-Shift-T remains configured to reopen recent closes.
 
 ## Reopen closed panes and tabs
 
