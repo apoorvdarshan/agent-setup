@@ -43,3 +43,9 @@ These instructions guide agent behaviour; they do not enforce runtime security p
 ## Keep the workspace when closing panes
 
 Command-W (HerdR prefix+x) uses `scripts/herdr-close-pane.py`: it closes the selected pane normally, but first creates a fresh tab in the same directory if this is the workspace’s final pane. Failed replacement creation leaves the original pane open. This applies to this shortcut, not shell exit, tab-menu closes, or explicit workspace closes. Reload with `herdr server reload-config`; Ghostty’s existing shortcut needs no change.
+
+## Reopen closed panes and tabs
+
+Command-Shift-T sends HerdR prefix+u to [herdr-pane-reopen](https://github.com/rchougule/herdr-pane-reopen), installed separately from commit `c8e72c535db5795b878698edeead5b3aa95fbccd` (0.1.1). It remembers recent closes locally and restores layouts and recorded agent conversations; it cannot restore killed processes or unsaved editor state. Claude, Codex, Cursor and OpenCode require their HerdR integrations for session IDs. Install these with `herdr integration install <agent>` on a new machine; restart existing agents if they have not reported their sessions yet. Reopen can start a fresh agent session if resume fails, so check its restore report.
+
+Install using `herdr plugin install rchougule/herdr-pane-reopen --ref c8e72c535db5795b878698edeead5b3aa95fbccd`, then `herdr server reload-config` and `herdr plugin action invoke rchougule.reopen.doctor`. Rust is required to build it. Reload Ghostty configuration with Command-Shift-comma after linking the config. Plugin state and conversation IDs remain local and are not committed.

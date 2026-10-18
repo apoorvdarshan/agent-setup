@@ -20,3 +20,9 @@ close_pane = ""
 key = "prefix+x"
 type = "shell"
 command = "/usr/bin/python3 /Users/apoorvdarshan/Documents/agent-setup/scripts/herdr-close-pane.py"
+
+[[keys.command]]
+key = "prefix+u"
+type = "plugin_action"
+command = "rchougule.reopen.reopen-last"
+description = "Reopen last closed pane/tab/workspace"

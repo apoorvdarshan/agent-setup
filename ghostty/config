@@ -46,3 +46,7 @@ keybind = cmd+alt+arrow_right=text:\x02l
 # Rename the current HerdR tab.
 keybind = cmd+r=unbind
 keybind = cmd+KeyR=text:\x02T
+
+# Reopen the last closed HerdR pane/tab and resume its captured agent session.
+keybind = cmd+shift+t=unbind
+keybind = cmd+shift+KeyT=text:\x02u
