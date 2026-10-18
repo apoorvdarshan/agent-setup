@@ -39,3 +39,7 @@ Enable its macOS Accessibility permission. When Ghostty is frontmost and the cli
 Run `python3 scripts/check-public.py` after staging. It scans the exact staged files with Gitleaks and checks structured configs for literal secrets/account identifiers. Enable the local commit guard with `git config core.hooksPath .githooks` (requires `gitleaks` on PATH). This reduces accidental exposure but cannot guarantee that arbitrary future edits contain no sensitive information.
 
 These instructions guide agent behaviour; they do not enforce runtime security permissions.
+
+## Keep the workspace when closing panes
+
+Command-W (HerdR prefix+x) uses `scripts/herdr-close-pane.py`: it closes the selected pane normally, but first creates a fresh tab in the same directory if this is the workspace’s final pane. Failed replacement creation leaves the original pane open. This applies to this shortcut, not shell exit, tab-menu closes, or explicit workspace closes. Reload with `herdr server reload-config`; Ghostty’s existing shortcut needs no change.

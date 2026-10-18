@@ -11,3 +11,12 @@ default_shell = "/Users/apoorvdarshan/.config/herdr/color-shell"
 
 [ui]
 prompt_new_tab_name = false
+
+# Keep the workspace when Command-W closes its final pane.
+[keys]
+close_pane = ""
+
+[[keys.command]]
+key = "prefix+x"
+type = "shell"
+command = "/usr/bin/python3 /Users/apoorvdarshan/Documents/agent-setup/scripts/herdr-close-pane.py"
