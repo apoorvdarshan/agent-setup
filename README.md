@@ -26,6 +26,12 @@ Live Codex, Cursor CLI, OpenCode provider/MCP, and shell settings that contain c
 
 Claude MCP registrations live separately in `~/.claude.json`, not in this repository. Browser/CUA skills and the HerdR plugin binaries are installed separately and are not vendored here. Current optional plugin: `kryptamine/herdr-auto-title` v0.13.2. Its config disables pane naming and workspace topics, so only tab titles change. cmux and Copilot are not part of this setup.
 
+## Clipboard images in Ghostty
+
+[ghostty-paste](https://github.com/DonghwanJeong/ghostty-paste) is installed separately at `~/Applications/ghostty-paste.app`, with login startup through `~/Library/LaunchAgents/com.github.ghostty-paste.plist`. The installed build comes from reviewed upstream commit `4a55beb5a65ab1484903b0fa946c5027635704d1` (app version 0.1.1).
+
+Enable its macOS Accessibility permission. When Ghostty is frontmost and the clipboard contains a PNG/TIFF image, it translates Command-V into Control-V; text-only paste is unchanged. The foreground agent must support Control-V image attachment. Claude is documented upstream; Codex/OpenCode inside HerdR still need an end-to-end check. App binaries and permissions are not synced by this repo or `relink.sh`.
+
 ## Publishing safely
 
 `.gitignore` is an explicit file allowlist. Auth files, live private configurations, backups, sessions, logs, caches, and third-party plugin directories are excluded. Do not force-add them.
