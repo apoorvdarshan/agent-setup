@@ -3,9 +3,9 @@ description: Apoorv global development instructions
 alwaysApply: true
 ---
 
-Never change ~/Documents/cli-settings/AGENTS.md or any linked instruction file on your own initiative, including in the middle of other work. When a rule seems worth adding or changing, suggest the exact wording and why, and edit only after I approve it in the conversation. Subagents and background agents never edit these files; they pass suggestions to the main agent.
+Never change ~/Documents/agent-setup/AGENTS.md or any linked instruction file on your own initiative, including in the middle of other work. When a rule seems worth adding or changing, suggest the exact wording and why, and edit only after I approve it in the conversation. Subagents and background agents never edit these files; they pass suggestions to the main agent.
 
-Before every update to the shared master ~/Documents/cli-settings/AGENTS.md or any linked instruction entrypoint for Codex, Claude Code, OpenCode, Cursor, or Copilot, create a dated, timestamped backup under ~/Documents/cli-settings/backups/. Follow symlinks and back up the original contents of every distinct target being changed; one backup of the master covers entrypoints that resolve to that same file. Edit the resolved target and keep all active symlinks intact. Never overwrite an earlier backup.
+Before every update to the shared master ~/Documents/agent-setup/AGENTS.md or any linked instruction entrypoint for Codex, Claude Code, OpenCode, Cursor, or Copilot, create a dated, timestamped backup under ~/Documents/agent-setup/backups/. Follow symlinks and back up the original contents of every distinct target being changed; one backup of the master covers entrypoints that resolve to that same file. Edit the resolved target and keep all active symlinks intact. Never overwrite an earlier backup.
 
 For every code change, create a git commit and push it to the current branch before finishing, unless the user explicitly says not to or pushing is impossible.
 
@@ -465,7 +465,7 @@ When creating a new app or product, especially a developer/business tool, sugges
 Apply when I ask to post on LinkedIn, including as part of marketing.
 
 - Post to my personal profile through the official API with
-  `~/Documents/cli-settings/tools/linkedin.py` (`status`, `post "text"`,
+  `~/Documents/agent-setup/tools/linkedin.py` (`status`, `post "text"`,
   `auth`). It reads the app credentials and my access token from macOS
   Keychain (`linkedin-client-id`, `linkedin-client-secret`,
   `linkedin-access-token`, `linkedin-member`); Keychain reads may need to

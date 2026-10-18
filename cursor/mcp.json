@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "agent-browser": {
+      "command": "/opt/homebrew/bin/agent-browser",
+      "args": [
+        "mcp",
+        "--tools",
+        "core,state,tabs"
+      ]
+    },
+    "cua-driver": {
+      "command": "/Users/apoorvdarshan/.local/bin/cua-driver",
+      "args": [
+        "mcp"
+      ]
+    }
+  }
+}

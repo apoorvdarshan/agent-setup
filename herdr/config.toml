@@ -1,0 +1,13 @@
+onboarding = false
+[ui.toast]
+delivery = "terminal"
+delay_seconds = 1
+
+[ui.sound]
+enabled = true
+
+[terminal]
+default_shell = "/Users/apoorvdarshan/.config/herdr/color-shell"
+
+[ui]
+prompt_new_tab_name = false

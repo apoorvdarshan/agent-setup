@@ -1,0 +1,48 @@
+theme = Ayu
+
+# Start Herdr in every new Ghostty tab, window, or split.
+command = /usr/bin/env -u NO_COLOR COLORTERM=truecolor /opt/homebrew/bin/herdr
+
+# Let Herdr deliver desktop notifications through Ghostty.
+desktop-notifications = true
+
+# HerdR macOS shortcuts: forward Command keys to the HerdR prefix.
+keybind = cmd+t=unbind
+keybind = cmd+KeyT=text:\x02c
+keybind = cmd+n=unbind
+keybind = cmd+KeyN=text:\x02N
+keybind = cmd+d=unbind
+keybind = cmd+KeyD=text:\x02v
+keybind = cmd+shift+d=unbind
+keybind = cmd+shift+KeyD=text:\x02-
+keybind = cmd+w=unbind
+keybind = cmd+KeyW=text:\x02x
+keybind = cmd+shift+enter=text:\x02z
+keybind = cmd+shift+[=text:\x02p
+keybind = cmd+shift+]=text:\x02n
+keybind = cmd+1=unbind
+keybind = cmd+digit_1=text:\x021
+keybind = cmd+2=unbind
+keybind = cmd+digit_2=text:\x022
+keybind = cmd+3=unbind
+keybind = cmd+digit_3=text:\x023
+keybind = cmd+4=unbind
+keybind = cmd+digit_4=text:\x024
+keybind = cmd+5=unbind
+keybind = cmd+digit_5=text:\x025
+keybind = cmd+6=unbind
+keybind = cmd+digit_6=text:\x026
+keybind = cmd+7=unbind
+keybind = cmd+digit_7=text:\x027
+keybind = cmd+8=unbind
+keybind = cmd+digit_8=text:\x028
+keybind = cmd+9=unbind
+keybind = cmd+digit_9=text:\x029
+keybind = cmd+alt+arrow_left=text:\x02h
+keybind = cmd+alt+arrow_down=text:\x02j
+keybind = cmd+alt+arrow_up=text:\x02k
+keybind = cmd+alt+arrow_right=text:\x02l
+
+# Rename the current HerdR tab.
+keybind = cmd+r=unbind
+keybind = cmd+KeyR=text:\x02T

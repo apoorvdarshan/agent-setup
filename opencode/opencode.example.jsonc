@@ -1,0 +1,52 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "permission": "allow",
+  "mcp": {
+    "github": {
+      "type": "remote",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "enabled": true,
+      "oauth": false,
+      "headers": {
+        "Authorization": "Bearer {env:GITHUB_TOKEN}"
+      }
+    },
+    "cloudflare": {
+      "type": "remote",
+      "url": "https://mcp.cloudflare.com/mcp",
+      "enabled": true
+    },
+    "fud-mail": {
+      "type": "local",
+      "command": [
+        "/opt/homebrew/bin/node",
+        "/Users/apoorvdarshan/plugins/fud-mail/src/server.mjs"
+      ],
+      "cwd": "/Users/apoorvdarshan/plugins/fud-mail",
+      "enabled": true
+    },
+    "google-drive": {
+      "type": "remote",
+      "url": "https://drivemcp.googleapis.com/mcp/v1",
+      "enabled": true
+    },
+    "agent-browser": {
+      "type": "local",
+      "command": [
+        "/opt/homebrew/bin/agent-browser",
+        "mcp",
+        "--tools",
+        "core,state,tabs"
+      ],
+      "enabled": true
+    },
+    "cua-driver": {
+      "type": "local",
+      "command": [
+        "/Users/apoorvdarshan/.local/bin/cua-driver",
+        "mcp"
+      ],
+      "enabled": true
+    }
+  }
+}

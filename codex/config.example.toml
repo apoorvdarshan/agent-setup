@@ -1,0 +1,21 @@
+# Public starter; live private config is preserved by relink.sh.
+model = "gpt-6-astra"
+model_reasoning_effort = "medium"
+service_tier = "fast"
+personality = "pragmatic"
+approval_policy = "never"
+sandbox_mode = "danger-full-access"
+suppress_unstable_features_warning = true
+
+[mcp_servers.agent-browser]
+command = "/opt/homebrew/bin/agent-browser"
+args = ["mcp", "--tools", "core,state,tabs"]
+
+[mcp_servers.cua-driver]
+command = "/Users/apoorvdarshan/.local/bin/cua-driver"
+args = ["mcp"]
+
+[tui]
+notifications = true
+notification_method = "osc9"
+notification_condition = "always"

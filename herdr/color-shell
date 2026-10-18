@@ -1,0 +1,5 @@
+#!/bin/sh
+# Clear inherited color suppression for interactive HerdR panes.
+unset NO_COLOR
+export COLORTERM=truecolor
+exec /bin/zsh -l "$@"

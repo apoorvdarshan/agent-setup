@@ -1,5 +1,33 @@
-# Publish only the shared instructions, introduction, and this allowlist.
+# Deny by default: only explicitly audited files may be staged.
 *
+!/.githooks/
+!/claude/
+!/codex/
+!/cursor/
+!/ghostty/
+!/herdr/
+!/herdr-auto-title/
+!/opencode/
+!/scripts/
+!/shell/
+!/tools/
 !/AGENTS.md
-!/.gitignore
 !/README.md
+!/.gitignore
+!/relink.sh
+!/scripts/relink.py
+!/scripts/check-public.py
+!/.githooks/pre-commit
+!/codex/config.example.toml
+!/claude/settings.json
+!/cursor/cli-config.example.json
+!/cursor/mcp.json
+!/opencode/cli.json
+!/opencode/opencode.example.json
+!/opencode/opencode.example.jsonc
+!/ghostty/config
+!/herdr/config.toml
+!/herdr/color-shell
+!/herdr-auto-title/config.env
+!/shell/zshrc.example
+!/tools/linkedin.py

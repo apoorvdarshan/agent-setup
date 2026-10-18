@@ -1,0 +1,66 @@
+export PATH="/opt/homebrew/bin:$PATH"
+alias git="/opt/homebrew/bin/git"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+export PATH="/opt/homebrew/bin:$PATH"
+export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
+export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
+export PATH="/opt/homebrew/opt/postgresql@18/bin:$PATH"
+export PATH="$(brew --prefix)/bin:$(brew --prefix)/opt/python@3.13/bin:$PATH"
+export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+export LDFLAGS="-L/opt/homebrew/opt/ruby/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/ruby/include"
+
+export PATH="/opt/homebrew/sbin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+
+# bun completions
+[ -s "/Users/apoorvdarshan/.bun/_bun" ] && source "/Users/apoorvdarshan/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# GitHub MCP credentials: reuse the GitHub CLI token kept in macOS Keychain.
+if command -v gh >/dev/null 2>&1; then
+  _github_mcp_token="$(gh auth token 2>/dev/null)"
+  if [ -n "$_github_mcp_token" ]; then
+    export CODEX_GITHUB_PERSONAL_ACCESS_TOKEN="$_github_mcp_token"
+    export GITHUB_PAT_TOKEN="$_github_mcp_token"
+    unset _github_mcp_token
+  fi
+fi
+unset GITHUB_PERSONAL_ACCESS_TOKEN
+
+# Android platform-tools (adb)
+export PATH="$HOME/Library/Android/sdk/platform-tools:$PATH"
+
+# Re-enable adb over Wi-Fi (phone must be plugged in via USB first)
+adbwifi() {
+  adb wait-for-usb-device tcpip 5555 || return 1
+  sleep 3
+  local ip
+  ip=$(adb -d shell ip -f inet addr show wlan0 2>/dev/null | awk '/inet /{sub(/\/.*/,"",$2); print $2; exit}')
+  if [ -z "$ip" ]; then
+    echo "Could not detect phone Wi-Fi IP — is Wi-Fi on?" >&2
+    return 1
+  fi
+  adb connect "$ip:5555"
+}
+
+# Local command-line tools
+export PATH="/Users/apoorvdarshan/.local/bin:$PATH"
+
+# Cursor Cloud Agents API
+# Private credential export omitted; configure it outside this repository.
+
+
+# LithosAI API key (OpenCode custom provider)
+# Private credential export omitted; configure it outside this repository.
+
+# Cursor terminal agent
+
+# Cursor terminal agent
+alias cursor='cursor-agent'
