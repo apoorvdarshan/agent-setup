@@ -169,6 +169,19 @@ Apply to my own repositories.
   monthly GitHub Actions quota. Run Mac jobs only for relevant file
   changes, and warn me before the quota runs out.
 
+## GitHub issue and PR closing
+
+Apply whenever you close an issue or close or merge a pull request.
+
+- Every issue you close gets a short comment saying why: the PR or
+  commit that fixed it, or that it is not planned, a duplicate (link
+  the original), or already supported. Say the fix arrives in the next
+  release unless that release is already public.
+  (`gh issue close <n> --reason completed|"not planned" --comment "..."`)
+- When you merge or close a pull request someone else wrote, comment
+  with thanks for the contribution. When closing without merging, also
+  say why and link any replacement.
+
 ## OpenSSF badges and security practices
 
 Apply this workflow when I explicitly request OpenSSF badges, passing
