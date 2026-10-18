@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Close the shortcut's pane, preserving its workspace with a fresh final tab."""
+import curses
 import fcntl
 import hashlib
 import json
@@ -7,6 +8,7 @@ import os
 from pathlib import Path
 import subprocess
 import sys
+import time
 
 
 def run(*args):
@@ -30,15 +32,47 @@ def process_state(pane):
 
 
 def confirm_close():
-    # Static AppleScript: no command lines, paths, or user text are interpolated.
-    script = '''
-        display dialog "An agent or command may still be running in this pane. Closing it will stop the process. Close anyway?" with title "Close HerdR pane?" buttons {"Cancel", "Close Pane"} default button "Cancel" cancel button "Cancel" with icon caution giving up after 60
-        if gave up of result then return "cancel"
-        return button returned of result
-    '''
-    result = subprocess.run(['/usr/bin/osascript', '-e', script],
-                            capture_output=True, text=True)
-    return result.returncode == 0 and result.stdout.strip() == 'Close Pane'
+    """Use HerdR's terminal popup; never steal input from the agent's PTY."""
+    if not sys.stdin.isatty() or not sys.stdout.isatty():
+        return False
+
+    def dialog(screen):
+        curses.curs_set(0)
+        screen.keypad(True)
+        screen.timeout(200)
+        curses.mousemask(curses.BUTTON1_CLICKED | curses.BUTTON1_RELEASED)
+        deadline = time.monotonic() + 60
+        while time.monotonic() < deadline:
+            screen.erase()
+            height, width = screen.getmaxyx()
+            lines = ["Close this pane?", "Running processes will stop.",
+                     "The workspace stays open.", "", "[ Enter: close ]  [ Esc: cancel ]"]
+            for y, text in enumerate(lines):
+                if y < height - 1 and width > 1:
+                    screen.addnstr(y, 1, text, width - 2,
+                                   curses.A_BOLD if y == 0 else curses.A_NORMAL)
+            screen.refresh()
+            key = screen.getch()
+            if key in (10, 13, curses.KEY_ENTER):
+                return True
+            if key in (27, 3, ord('q'), ord('n')):
+                return False
+            if key == curses.KEY_MOUSE:
+                try:
+                    _, x, y, _, buttons = curses.getmouse()
+                    if buttons & (curses.BUTTON1_CLICKED | curses.BUTTON1_RELEASED) and y == 4:
+                        if 1 <= x < 17:
+                            return True
+                        if 19 <= x < 34:
+                            return False
+                except curses.error:
+                    pass
+        return False
+
+    try:
+        return curses.wrapper(dialog)
+    except (curses.error, KeyboardInterrupt):
+        return False
 
 
 def close(pane_id):
@@ -55,7 +89,8 @@ def close(pane_id):
         # Re-read after acquiring the lock: repeated shortcuts may target a closed pane.
         pane = run('pane', 'get', pane_id)['pane']
         busy, identity = process_state(pane)
-        if busy and not confirm_close():
+        initial_panes = run('pane', 'list', '--workspace', workspace)['panes']
+        if (busy or len(initial_panes) == 1) and not confirm_close():
             return
         # Never apply an earlier confirmation to a different foreground process.
         pane = run('pane', 'get', pane_id)['pane']

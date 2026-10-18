@@ -18,8 +18,11 @@ close_pane = ""
 
 [[keys.command]]
 key = "prefix+x"
-type = "shell"
+type = "popup"
 command = "/usr/bin/python3 /Users/apoorvdarshan/Documents/agent-setup/scripts/herdr-close-pane.py"
+description = "Close pane (keep workspace)"
+width = 60
+height = 9
 
 [[keys.command]]
 key = "prefix+u"
