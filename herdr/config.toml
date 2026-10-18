@@ -11,7 +11,7 @@ default_shell = "/Users/apoorvdarshan/.config/herdr/color-shell"
 
 [ui]
 prompt_new_tab_name = false
-confirm_close = false
+confirm_close = true
 
 [[keys.command]]
 key = "prefix+u"
