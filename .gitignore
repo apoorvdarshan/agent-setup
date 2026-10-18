@@ -28,6 +28,8 @@
 !/ghostty/config
 !/herdr/config.toml
 !/herdr/color-shell
+!/herdr/bin/
+!/herdr/bin/terminal-notifier
 !/herdr-auto-title/config.env
 !/shell/zshrc.example
 !/tools/linkedin.py

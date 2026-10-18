@@ -10,7 +10,7 @@ My shared AI-agent instructions and macOS terminal setup: Codex, Claude Code, Cu
 | `codex/`, `cursor/`, `opencode/` | Safe settings and sanitized examples of private configs |
 | `claude/` | Claude Code preferences |
 | `ghostty/` | Theme, HerdR startup, Mac keyboard shortcuts |
-| `herdr/` | Terminal settings and colour-environment fix |
+| `herdr/` | Terminal settings, colour-environment fix, click-to-pane notification wrapper (`bin/terminal-notifier`) |
 | `herdr-auto-title/` | Tab-only automatic title settings |
 | `shell/` | Sanitized shell startup example |
 | `tools/linkedin.py` | LinkedIn API helper; credentials stay in macOS Keychain |
@@ -31,6 +31,12 @@ Claude MCP registrations live separately in `~/.claude.json`, not in this reposi
 [ghostty-paste](https://github.com/DonghwanJeong/ghostty-paste) is installed separately at `~/Applications/ghostty-paste.app`, with login startup through `~/Library/LaunchAgents/com.github.ghostty-paste.plist`. The installed build comes from reviewed upstream commit `4a55beb5a65ab1484903b0fa946c5027635704d1` (app version 0.1.1).
 
 Enable its macOS Accessibility permission. When Ghostty is frontmost and the clipboard contains a PNG/TIFF image, it translates Command-V into Control-V; text-only paste is unchanged. The foreground agent must support Control-V image attachment. Claude is documented upstream; Codex/OpenCode inside HerdR still need an end-to-end check. App binaries and permissions are not synced by this repo or `relink.sh`.
+
+## Agent notifications
+
+HerdR sends agent alerts as macOS banners (`ui.toast.delivery = "system"`) because Ghostty drops banners from its focused tab, which hosts every HerdR pane. Banners go through [terminal-notifier](https://github.com/julienXX/terminal-notifier), installed separately with `brew install terminal-notifier`; without it HerdR falls back to `osascript`, whose banners open Script Editor when clicked.
+
+HerdR 0.9.5 makes a banner jump to its pane only on Windows. Ghostty puts `herdr/bin/` first on HerdR's PATH, so HerdR runs its `terminal-notifier` wrapper: it finds the agent pane from the notification's workspace and tab text and adds a click action, `herdr agent focus <pane>`. Other calls pass through unchanged. Notifications come from the HerdR client, so a PATH change applies after reopening the Ghostty window; running agents are unaffected.
 
 ## Publishing safely
 

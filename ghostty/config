@@ -1,7 +1,7 @@
 theme = Ayu
 
 # Start Herdr in every new Ghostty tab, window, or split.
-command = /usr/bin/env -u NO_COLOR COLORTERM=truecolor PATH=/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/Ghostty.app/Contents/MacOS /opt/homebrew/bin/herdr
+command = /usr/bin/env -u NO_COLOR COLORTERM=truecolor PATH=/Users/apoorvdarshan/Documents/agent-setup/herdr/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/Ghostty.app/Contents/MacOS /opt/homebrew/bin/herdr
 
 # Let Herdr deliver desktop notifications through Ghostty.
 desktop-notifications = true

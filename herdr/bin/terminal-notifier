@@ -1,0 +1,40 @@
+#!/bin/bash
+# HerdR sends macOS system notifications as
+#   terminal-notifier -title "<agent> finished" -message "<workspace> · <n>[ · <tab>]" -activate <terminal>
+# but, unlike on Windows, gives the banner no pane to jump to. Ghostty puts this
+# directory first on HerdR's PATH so a click also focuses the agent's pane.
+real=${TERMINAL_NOTIFIER_REAL:-/opt/homebrew/bin/terminal-notifier}
+herdr=/opt/homebrew/bin/herdr
+
+if [[ $# -lt 4 || $1 != -title || $3 != -message ]]; then
+  exec "$real" "$@"
+fi
+body=$4
+
+workspaces=$("$herdr" workspace list 2>/dev/null) || exec "$real" "$@"
+# Longest "<label> · <number>" prefix of the body names the workspace; the rest is the tab label.
+read -r ws_id tab_label < <(jq -r --arg body "$body" '
+  [.result.workspaces[]
+   | (.label + " · " + (.number | tostring)) as $p
+   | select($body == $p or ($body | startswith($p + " · ")))
+   | {id: .workspace_id, rest: ($body | ltrimstr($p) | ltrimstr(" · "))}]
+  | min_by(.rest | length) // empty
+  | "\(.id) \(.rest)"' <<<"$workspaces" 2>/dev/null)
+[[ -n $ws_id ]] || exec "$real" "$@"
+
+tabs=$("$herdr" tab list --workspace "$ws_id" 2>/dev/null)
+agents=$("$herdr" agent list 2>/dev/null) || exec "$real" "$@"
+# The agent whose state changed last is the one this notification is about.
+pane=$(jq -r --arg ws "$ws_id" --arg tab "$tab_label" --argjson tabs "${tabs:-null}" '
+  ([$tabs.result.tabs[]? | .label as $l
+    | select($tab != "" and ($l == $tab or ($l | endswith($tab)) or ($tab | endswith($l))))
+    | .tab_id] | first) as $tab_id
+  | [.result.agents[] | select(.workspace_id == $ws)] as $in_ws
+  | ([$in_ws[] | select(.tab_id == $tab_id)] | if length > 0 then . else $in_ws end)
+  | max_by(.state_change_seq // -1) // empty
+  | .pane_id' <<<"$agents" 2>/dev/null)
+
+if [[ $pane =~ ^[A-Za-z0-9:_-]+$ ]]; then
+  exec "$real" "$@" -execute "$herdr agent focus $pane"
+fi
+exec "$real" "$@"
