@@ -10,7 +10,8 @@ Credentials live in the macOS Keychain (account = $USER):
 Usage:
   linkedin.py auth                      sign in (prints a URL, catches the redirect)
   linkedin.py status                    show who is signed in and token expiry
-  linkedin.py post "text" [--yes]       publish a post to your profile
+  linkedin.py post "text" [--image=PATH] [--yes]
+                                        publish a post to your profile, optionally with one image
 """
 import datetime
 import getpass
@@ -190,31 +191,78 @@ def api_version():
     return d.strftime("%Y%m")
 
 
-def cmd_post(text, yes):
+def rest_headers(access):
+    return {
+        "Authorization": f"Bearer {access}",
+        "Content-Type": "application/json",
+        "LinkedIn-Version": api_version(),
+        "X-Restli-Protocol-Version": "2.0.0",
+    }
+
+
+def upload_image(access, member, path):
+    """Upload an image through the Images API and return its urn:li:image."""
+    try:
+        with open(path, "rb") as f:
+            blob = f.read()
+    except OSError as e:
+        sys.exit(f"Can't read image: {e}")
+    status, _, body = http_json(
+        "https://api.linkedin.com/rest/images?action=initializeUpload",
+        data=json.dumps({"initializeUploadRequest": {
+            "owner": f"urn:li:person:{member['sub']}"}}).encode(),
+        headers=rest_headers(access),
+        method="POST",
+    )
+    if status != 200 or "value" not in body:
+        sys.exit(f"Image upload init failed ({status}): {body}")
+    upload_url, image_urn = body["value"]["uploadUrl"], body["value"]["image"]
+    req = urllib.request.Request(upload_url, data=blob, method="PUT",
+                                 headers={"Authorization": f"Bearer {access}",
+                                          "Content-Type": "application/octet-stream"})
+    try:
+        with urllib.request.urlopen(req, timeout=120) as resp:
+            if resp.status not in (200, 201):
+                sys.exit(f"Image upload failed ({resp.status})")
+    except urllib.error.HTTPError as e:
+        sys.exit(f"Image upload failed ({e.code}): {e.read().decode(errors='replace')}")
+    # Wait until LinkedIn has processed the image.
+    enc = urllib.parse.quote(image_urn, safe="")
+    for _ in range(30):
+        status, _, info = http_json(f"https://api.linkedin.com/rest/images/{enc}",
+                                    headers=rest_headers(access))
+        if status == 200 and info.get("status") == "AVAILABLE":
+            break
+        if status == 200 and info.get("status") == "PROCESSING_FAILED":
+            sys.exit("LinkedIn failed to process the image.")
+        time.sleep(2)
+    return image_urn
+
+
+def cmd_post(text, yes, image=None):
     access, member = load_session()
     if not text.strip():
         sys.exit("Post text is empty.")
     if not yes:
-        print(f"--- Posting publicly as {member['name']} ---\n{text}\n---")
+        extra = f"\n[image: {image}]" if image else ""
+        print(f"--- Posting publicly as {member['name']} ---\n{text}{extra}\n---")
         if input("Post this? [y/N] ").strip().lower() != "y":
             sys.exit("Cancelled.")
+    payload = {
+        "author": f"urn:li:person:{member['sub']}",
+        "commentary": to_little_text(text),
+        "visibility": "PUBLIC",
+        "distribution": {"feedDistribution": "MAIN_FEED", "targetEntities": [],
+                         "thirdPartyDistributionChannels": []},
+        "lifecycleState": "PUBLISHED",
+        "isReshareDisabledByAuthor": False,
+    }
+    if image:
+        payload["content"] = {"media": {"id": upload_image(access, member, image)}}
     status, headers, body = http_json(
         "https://api.linkedin.com/rest/posts",
-        data=json.dumps({
-            "author": f"urn:li:person:{member['sub']}",
-            "commentary": to_little_text(text),
-            "visibility": "PUBLIC",
-            "distribution": {"feedDistribution": "MAIN_FEED", "targetEntities": [],
-                             "thirdPartyDistributionChannels": []},
-            "lifecycleState": "PUBLISHED",
-            "isReshareDisabledByAuthor": False,
-        }).encode(),
-        headers={
-            "Authorization": f"Bearer {access}",
-            "Content-Type": "application/json",
-            "LinkedIn-Version": api_version(),
-            "X-Restli-Protocol-Version": "2.0.0",
-        },
+        data=json.dumps(payload).encode(),
+        headers=rest_headers(access),
         method="POST",
     )
     if status != 201:
@@ -232,7 +280,8 @@ def main():
     elif args[0] == "status":
         cmd_status()
     elif args[0] == "post" and len(args) == 2:
-        cmd_post(args[1], "--yes" in sys.argv)
+        image = next((a.split("=", 1)[1] for a in sys.argv[1:] if a.startswith("--image=")), None)
+        cmd_post(args[1], "--yes" in sys.argv, image)
     else:
         sys.exit(__doc__)
 
