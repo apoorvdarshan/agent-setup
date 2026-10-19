@@ -5,6 +5,7 @@
 !/codex/
 !/cursor/
 !/ghostty/
+!/hammerspoon/
 !/herdr/
 !/herdr-auto-title/
 !/opencode/
@@ -26,6 +27,7 @@
 !/opencode/opencode.example.json
 !/opencode/opencode.example.jsonc
 !/ghostty/config
+!/hammerspoon/init.lua
 !/herdr/config.toml
 !/herdr/color-shell
 !/herdr/bin/

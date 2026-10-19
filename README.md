@@ -1,6 +1,6 @@
 # agent-setup
 
-My shared AI-agent instructions and macOS terminal setup: Codex, Claude Code, Cursor Agent, OpenCode, Ghostty, and HerdR.
+My shared AI-agent instructions and macOS terminal setup: Codex, Claude Code, Cursor Agent, OpenCode, Ghostty, HerdR, and Hammerspoon.
 
 [Read the shared instructions → AGENTS.md](AGENTS.md)
 
@@ -12,6 +12,7 @@ My shared AI-agent instructions and macOS terminal setup: Codex, Claude Code, Cu
 | `ghostty/` | Theme, HerdR startup, Mac keyboard shortcuts |
 | `herdr/` | Terminal settings, colour-environment fix, click-to-pane notification wrapper (`bin/terminal-notifier`) |
 | `herdr-auto-title/` | Tab-only automatic title settings |
+| `hammerspoon/` | Command-click opens HerdR links in Ghostty |
 | `shell/` | Sanitized shell startup example |
 | `tools/linkedin.py` | LinkedIn API helper; credentials stay in macOS Keychain |
 | `relink.sh` | Restore active configuration symlinks without overwriting private settings |
@@ -31,6 +32,12 @@ Claude MCP registrations live separately in `~/.claude.json`, not in this reposi
 [ghostty-paste](https://github.com/DonghwanJeong/ghostty-paste) is installed separately at `~/Applications/ghostty-paste.app`, with login startup through `~/Library/LaunchAgents/com.github.ghostty-paste.plist`. The installed build comes from reviewed upstream commit `4a55beb5a65ab1484903b0fa946c5027635704d1` (app version 0.1.1).
 
 Enable its macOS Accessibility permission. When Ghostty is frontmost and the clipboard contains a PNG/TIFF image, it translates Command-V into Control-V; text-only paste is unchanged. The foreground agent must support Control-V image attachment. Claude is documented upstream; Codex/OpenCode inside HerdR still need an end-to-end check. App binaries and permissions are not synced by this repo or `relink.sh`.
+
+## Command-click links in HerdR
+
+HerdR captures the mouse, so Ghostty passes clicks to it instead of opening links, and HerdR 0.9.5 opens links on Control-click because terminal mouse reports cannot carry Command. [Hammerspoon](https://www.hammerspoon.org) (`brew install --cask hammerspoon`, installed separately) runs `hammerspoon/init.lua`, linked to `~/.hammerspoon/init.lua`. While Ghostty is frontmost, it rewrites Command to Control on clicks and pointer moves over Ghostty's focused window, so Command-click opens a link and Command-hover underlines it. Keyboard shortcuts, HerdR's mouse controls, and other apps are unchanged. Shift-Command-click still uses Ghostty's own link detection.
+
+Enable Hammerspoon's macOS Accessibility permission and allow it to read the Documents folder (the config is linked there). The script turns on launch at login and hides the Dock icon; the menu-bar icon reloads the config.
 
 ## Agent notifications
 

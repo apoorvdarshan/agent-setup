@@ -20,6 +20,7 @@ public = {
  '.config/opencode/cli.json': 'opencode/cli.json', '.config/ghostty/config': 'ghostty/config',
  '.config/herdr/config.toml': 'herdr/config.toml', '.config/herdr/color-shell': 'herdr/color-shell',
  '.config/herdr-auto-title/config.env': 'herdr-auto-title/config.env',
+ '.hammerspoon/init.lua': 'hammerspoon/init.lua',
 }
 local = {
  '.codex/config.toml': ('codex/config.toml', 'codex/config.example.toml'),
