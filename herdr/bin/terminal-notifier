@@ -1,8 +1,9 @@
 #!/bin/bash
 # HerdR sends macOS system notifications as
 #   terminal-notifier -title "<agent> finished" -message "<workspace> · <n>[ · <tab>]" -activate <terminal>
-# but, unlike on Windows, gives the banner no pane to jump to. Ghostty puts this
-# directory first on HerdR's PATH so a click also focuses the agent's pane.
+# but, unlike on Windows, gives the banner no pane to jump to and never withdraws
+# it. Ghostty puts this directory first on HerdR's PATH so a click focuses the
+# agent's pane, and the banner is removed once that pane is seen.
 real=${TERMINAL_NOTIFIER_REAL:-/opt/homebrew/bin/terminal-notifier}
 herdr=/opt/homebrew/bin/herdr
 
@@ -10,6 +11,31 @@ if [[ $# -lt 4 || $1 != -title || $3 != -message ]]; then
   exec "$real" "$@"
 fi
 body=$4
+terminal=com.mitchellh.ghostty
+[[ $5 == -activate && -n $6 ]] && terminal=$6
+
+# Remove the banner once its pane is focused with the terminal in front, whether
+# the user clicked it or went there directly. One watcher per pane.
+clear_when_seen() {
+  local pane=$1 group=$2 dir=${TMPDIR:-/tmp}/herdr-notify list focused
+  local pidfile=$dir/${pane//:/_}.pid end=$((SECONDS + 43200))
+  trap '' HUP
+  mkdir -p "$dir"
+  local old me
+  me=$(exec /bin/sh -c 'echo "$PPID"') # this watcher's pid; macOS bash 3.2 has no $BASHPID
+  old=$(cat "$pidfile" 2>/dev/null)
+  [[ $old =~ ^[0-9]+$ ]] && ps -o args= -p "$old" 2>/dev/null | grep -qF "${BASH_SOURCE[0]}" && kill "$old" 2>/dev/null
+  echo "$me" >"$pidfile"
+  while (( SECONDS < end )); do
+    sleep 1
+    list=$("$herdr" agent list 2>/dev/null) || continue
+    focused=$(jq -r --arg p "$pane" '.result.agents[] | select(.pane_id == $p) | .focused' <<<"$list")
+    [[ -n $focused ]] || break # the agent is gone
+    [[ $focused == true ]] && lsappinfo info -only bundleID "$(lsappinfo front)" | grep -qF "\"$terminal\"" && break
+  done
+  "$real" -remove "$group" >/dev/null 2>&1
+  [[ $(cat "$pidfile" 2>/dev/null) == "$me" ]] && rm -f "$pidfile"
+}
 
 workspaces=$("$herdr" workspace list 2>/dev/null) || exec "$real" "$@"
 # Longest "<label> · <number>" prefix of the body names the workspace; the rest is the tab label.
@@ -35,6 +61,9 @@ pane=$(jq -r --arg ws "$ws_id" --arg tab "$tab_label" --argjson tabs "${tabs:-nu
   | .pane_id' <<<"$agents" 2>/dev/null)
 
 if [[ $pane =~ ^[A-Za-z0-9:_-]+$ ]]; then
-  exec "$real" "$@" -execute "$herdr agent focus $pane"
+  # The group also makes a newer banner for the same pane replace the older one.
+  group=herdr-$pane
+  clear_when_seen "$pane" "$group" </dev/null >/dev/null 2>&1 &
+  exec "$real" "$@" -group "$group" -execute "$herdr agent focus $pane"
 fi
 exec "$real" "$@"

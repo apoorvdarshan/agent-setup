@@ -36,7 +36,7 @@ Enable its macOS Accessibility permission. When Ghostty is frontmost and the cli
 
 HerdR sends agent alerts as macOS banners (`ui.toast.delivery = "system"`) because Ghostty drops banners from its focused tab, which hosts every HerdR pane. Banners go through [terminal-notifier](https://github.com/julienXX/terminal-notifier), installed separately with `brew install terminal-notifier`; without it HerdR falls back to `osascript`, whose banners open Script Editor when clicked.
 
-HerdR 0.9.5 makes a banner jump to its pane only on Windows. Ghostty puts `herdr/bin/` first on HerdR's PATH, so HerdR runs its `terminal-notifier` wrapper: it finds the agent pane from the notification's workspace and tab text and adds a click action, `herdr agent focus <pane>`. Other calls pass through unchanged. Notifications come from the HerdR client, so a PATH change applies after reopening the Ghostty window; running agents are unaffected.
+HerdR 0.9.5 makes a banner jump to its pane only on Windows. Ghostty puts `herdr/bin/` first on HerdR's PATH, so HerdR runs its `terminal-notifier` wrapper: it finds the agent pane from the notification's workspace and tab text and adds a click action, `herdr agent focus <pane>`. It also groups banners by pane, so a newer one replaces the older, and starts a background watcher that removes the banner once that pane is focused with Ghostty in front, whether you clicked the banner or went there yourself. Watchers give up after 12 hours or when the agent exits. Other calls pass through unchanged. Notifications come from the HerdR client, so a PATH change applies after reopening the Ghostty window; running agents are unaffected.
 
 ## Publishing safely
 
