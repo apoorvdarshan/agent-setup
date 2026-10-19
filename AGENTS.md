@@ -35,6 +35,24 @@ human verification is required, ask me to complete it myself; never attempt
 to bypass it. Preserve task progress, record what was and was not submitted,
 and avoid duplicate submissions when resuming. Keep my browser open afterward.
 
+## Disk space
+
+- Before heavy work (builds, clones, worktrees, simulators, large downloads),
+  check free space with `df -h /System/Volumes/Data`. Below 30 GB free, tell
+  me and clean only what these rules allow before continuing.
+- Keep throwaway clones, worktrees and build output in the session scratchpad.
+  When a task ends, remove what it created once its branch is pushed and the
+  tree is clean (`git worktree remove` for worktrees). Never delete anything
+  with uncommitted changes or unpushed commits; list it for me instead.
+- Build with fixed DerivedData paths (`<project>-device-release`,
+  `<project>-device-debug`, `<project>-simulator-tests`) and never leave
+  Xcode's random-hash folders behind. Delete simulators, emulators and system
+  images a task created when it finishes.
+- When a tool keeps old versions (Codex releases, Rust toolchains, SDKs), keep
+  only the current one unless a project pins another.
+- Never delete app data, Downloads, Photos or chat media without asking;
+  report the biggest items instead.
+
 ## Marketing
 
 Apply these rules only when I explicitly ask you to market or promote a product.
