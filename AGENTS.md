@@ -291,14 +291,30 @@ release switches or store automation.
 
 - Build, sign, and upload iOS releases with GitHub Actions only. Never
   use or set up Xcode Cloud.
+- Use the App Store Connect CLI (`asc`, rorkai/App-Store-Connect-CLI)
+  for every App Store Connect task, in release pipelines and ad hoc
+  checks; never hand-write App Store Connect API calls. Copy Fud AI's
+  `scripts/store/asc_cli.py` unchanged into every app: it pins an exact
+  asc release and checks its SHA-256 before passing credentials, turns
+  telemetry off, and runs read-only (`ASC_READ_ONLY`) for checks, build
+  waits, and validation runs. xcodebuild still uploads the binary. Bump
+  the pin in every app at once.
 - Reuse the shared CI signing certificate (see Fud AI's
   `store/README.md`) and set up a new app's secrets as part of the
   setup. Never create or rotate a certificate just to add an app.
 - A manual run validates by archiving, exporting, and validating with
   App Store Connect. Allow validating as a version that is not yet
   approved.
-- Separate controls for listing metadata, screenshots, What's New,
-  review submission, and public release.
+- Separate controls for listing metadata, screenshots, product page
+  header and search results images (`IOS_UPLOAD_CREATIVE_ASSETS`),
+  What's New, review submission, and public release.
+- Upload App Store screenshots and header/search images as RGB without
+  an alpha channel; App Store Connect refuses alpha even when every
+  pixel is opaque.
+- Pick and check the review draft before the first App Store Connect
+  write. Keep header/search images out of the version's draft, and let
+  a rerun finish a draft an interrupted run left instead of creating
+  another; App Store Connect drafts can only be removed by hand.
 - Turn on public release (`IOS_PUBLIC_RELEASE`) for new apps, so a
   version goes live as soon as Apple approves it. This is an exception
   to new switches defaulting to off. For an existing app where it's
