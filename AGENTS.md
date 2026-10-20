@@ -196,6 +196,22 @@ Apply to my own repositories.
   monthly GitHub Actions quota. Run Mac jobs only for relevant file
   changes, and warn me before the quota runs out.
 
+## Dependabot PRs
+
+When working in one of my repositories, check for open Dependabot PRs and
+merge the safe ones without asking:
+
+- One at a time: update the branch, wait for every check, and merge exactly
+  the head that passed (`--match-head-commit`). Never use admin bypass to
+  get past a failing or pending check.
+- Read the changelog for major-version bumps. Re-run a failed check once
+  if it looks flaky; fix a small break on the PR branch; otherwise leave it
+  open and tell me why. When a major version isn't supported by the
+  toolchain yet, close the PR with a comment and add a Dependabot ignore rule.
+- Don't merge while a release run is in progress in that repository.
+- After merging a bump that changes what runs on a mobile device, follow
+  the device install rule.
+
 ## GitHub issue and PR closing
 
 Apply whenever you close an issue or close or merge a pull request.
