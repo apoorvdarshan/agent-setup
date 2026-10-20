@@ -57,9 +57,6 @@ export PATH="/Users/apoorvdarshan/.local/bin:$PATH"
 # Private credential export omitted; configure it outside this repository.
 
 
-# LithosAI API key (OpenCode custom provider)
-# Private credential export omitted; configure it outside this repository.
-
 # Cursor terminal agent
 
 # Cursor terminal agent
