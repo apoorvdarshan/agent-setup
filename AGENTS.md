@@ -291,14 +291,28 @@ release switches or store automation.
 
 - Build, sign, and upload iOS releases with GitHub Actions only. Never
   use or set up Xcode Cloud.
+- Call App Store Connect through each app's own hand-written client
+  (Fud AI's `scripts/store/asc_release.py`). Don't add third-party
+  store CLIs such as asc.
 - Reuse the shared CI signing certificate (see Fud AI's
   `store/README.md`) and set up a new app's secrets as part of the
   setup. Never create or rotate a certificate just to add an app.
 - A manual run validates by archiving, exporting, and validating with
   App Store Connect. Allow validating as a version that is not yet
   approved.
-- Separate controls for listing metadata, screenshots, What's New,
-  review submission, and public release.
+- Separate controls for listing metadata, screenshots (iPhone, iPad,
+  iPhone Duo, and Apple Watch), product page header and search results
+  images (`IOS_UPLOAD_CREATIVE_ASSETS`), What's New, review submission,
+  and public release.
+- Upload screenshots as RGB copies made at upload time, never by
+  rewriting committed files; Apple's screenshot specifications don't
+  allow an alpha channel. Header and search results images must
+  already be RGB.
+- Send header and search results images to App Review in their own
+  submission, never in the version's draft. Pick and check the
+  version's draft before the first App Store Connect write, and let a
+  rerun finish a draft an interrupted run left instead of creating
+  another; drafts can only be removed by hand.
 - Turn on public release (`IOS_PUBLIC_RELEASE`) for new apps, so a
   version goes live as soon as Apple approves it. This is an exception
   to new switches defaulting to off. For an existing app where it's
