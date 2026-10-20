@@ -25,47 +25,5 @@
     "doom_loop": "allow",
     "external_directory": "allow"
   },
-  "plugin": [],
-  "provider": {
-    "lithosai": {
-      "models": {
-        "deepseek-ai/DeepSeek-V4.1-Flash": {
-          "name": "DeepSeek V4.1 Flash (Base)"
-        },
-        "deepseek-ai/DeepSeek-V4.1-Flash-fast": {
-          "name": "DeepSeek V4.1 Flash (Fast)"
-        },
-        "deepseek-ai/DeepSeek-V4.1-Flash-ultra": {
-          "name": "DeepSeek V4.1 Flash (Ultra)"
-        },
-        "deepseek-ai/DeepSeek-V4.1-Flash-ultra-chat": {
-          "name": "DeepSeek V4.1 Flash (Ultra Chat)"
-        },
-        "moonshotai/Kimi-K3": {
-          "name": "Kimi K3"
-        },
-        "moonshotai/Kimi-K3-fast": {
-          "name": "Kimi K3 (Fast)"
-        },
-        "moonshotai/Kimi-K3-ultra": {
-          "name": "Kimi K3 (Ultra)"
-        },
-        "moonshotai/Kimi-K3-ultra-chat": {
-          "name": "Kimi K3 (Ultra Chat)"
-        },
-        "zai-org/GLM-5.3": {
-          "name": "GLM 5.3"
-        },
-        "zai-org/GLM-5.3-ultra-chat": {
-          "name": "GLM 5.3 (Ultra Chat)"
-        }
-      },
-      "name": "LithosAI",
-      "npm": "@ai-sdk/openai-compatible",
-      "options": {
-        "apiKey": "{env:LITHOSAI_API_KEY}",
-        "baseURL": "https://api.lithosai.cloud/v1"
-      }
-    }
-  }
+  "plugin": []
 }
