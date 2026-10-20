@@ -53,6 +53,15 @@ and avoid duplicate submissions when resuming. Keep my browser open afterward.
 - Never delete app data, Downloads, Photos or chat media without asking;
   report the biggest items instead.
 
+## Email
+
+Use the `fud-mail` MCP for every email task (search, read, draft, send). It
+covers `apoorv@fud-ai.app`, `apoorvdarshan@gmail.com`, and `ad13dtu@gmail.com`;
+always pass the mailbox explicitly. Send from the address the recipient knows
+me by: `apoorvdarshan@gmail.com` for personal accounts and services registered
+to it, and `apoorv@fud-ai.app` for marketing and job outreach (see below).
+Prefer it over other Gmail connectors. Check Sent for duplicates first.
+
 ## Marketing
 
 Apply these rules only when I explicitly ask you to market or promote a product.
