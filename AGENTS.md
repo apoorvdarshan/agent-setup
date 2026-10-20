@@ -307,18 +307,18 @@ release switches or store automation.
   need their own gate, even when binary upload or rollout is disabled.
 - Creating or testing this automation does not itself authorize
   submitting or publishing an app.
-- Fud AI (`fud-ai`, `store/README.md`) is the reference setup. Keep
-  every app's release pipeline in sync: when you fix or improve one,
-  check every app that shares it, Fud AI included, and apply the change
-  there too.
+- All my apps run their store releases on `apoorvdarshan/store-release`.
+  Each app keeps only `store/store-release.toml`, its store data, and thin
+  caller workflows pinned to a store-release release (commit SHA plus
+  `# vX.Y.Z`). Change pipeline behaviour only in store-release, release it,
+  and let Dependabot bump every app; never copy the tooling back into an app.
 
 ### iOS
 
 - Build, sign, and upload iOS releases with GitHub Actions only. Never
   use or set up Xcode Cloud.
-- Call App Store Connect through each app's own hand-written client
-  (Fud AI's `scripts/store/asc_release.py`). Don't add third-party
-  store CLIs such as asc.
+- Call App Store Connect only through store-release's hand-written
+  client. Don't add third-party store CLIs such as asc.
 - Reuse the shared CI signing certificate (see Fud AI's
   `store/README.md`) and set up a new app's secrets as part of the
   setup. Never create or rotate a certificate just to add an app.
