@@ -13,7 +13,7 @@ args = ["mcp", "--tools", "core,state,tabs"]
 
 [mcp_servers.cua-driver]
 command = "/Users/apoorvdarshan/.local/bin/cua-driver"
-args = ["mcp"]
+args = ["mcp", "--grant", "existing-profile"]
 
 [tui]
 notifications = true

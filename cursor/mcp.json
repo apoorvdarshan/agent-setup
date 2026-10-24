@@ -11,7 +11,9 @@
     "cua-driver": {
       "command": "/Users/apoorvdarshan/.local/bin/cua-driver",
       "args": [
-        "mcp"
+        "mcp",
+        "--grant",
+        "existing-profile"
       ]
     }
   }

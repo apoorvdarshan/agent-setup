@@ -44,7 +44,9 @@
       "type": "local",
       "command": [
         "/Users/apoorvdarshan/.local/bin/cua-driver",
-        "mcp"
+        "mcp",
+        "--grant",
+        "existing-profile"
       ],
       "enabled": true
     }
