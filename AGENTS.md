@@ -623,6 +623,7 @@ For new apps, include this Discord support pattern by default unless I opt out. 
 ### Releases and completion
 
 - Check supported stores hourly and announce newly public releases with release notes and download links. Seed the initial version without announcing a backlog; deduplicate later announcements. Builds, uploads, testing tracks, and releases still in review are not public releases. Skip unconfigured platforms or ambiguous publication status.
+- For iOS liveness, read App Store Connect (the READY_FOR_SALE version) with a dedicated Customer Support API key, not the public iTunes lookup, which answers Cloudflare Workers with HTTP 403. That role reads release notes only through `include=appStoreVersionLocalizations`.
 - Store checks and Discord setup never authorize publishing an app. Follow existing authorization rules for external writes/messages; do not post live test reports or announcements without authorization.
 - Document per-app IDs, channels, invite links, command registration, secrets by name only, deployment, and recovery. Safely upsert commands without removing unrelated ones.
 - Test validation, cooldowns, AI fallback, GitHub failures, and announcement deduplication. Verify app links and deployed configuration within the authorized scope. Report missing access/configuration honestly; ask only for genuinely missing input and do not call a local implementation live until verified.
